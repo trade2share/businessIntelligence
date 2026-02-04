@@ -1,0 +1,3 @@
+# LaTeX-Build-Konfiguration (latexmk)
+$pdf_mode = 1;
+$bibtex_use = 2;  # biber statt bibtex

@@ -1,0 +1,33 @@
+sequenceDiagram
+    participant APP as Anwendung
+    participant ODB as Operative DB
+    participant TRG as UPDATE Trigger
+    participant DWH as Data Warehouse
+    
+    APP->>ODB: UPDATE lieferanten<br/>SET rabatt_prozent = 10<br/>WHERE lieferant_id = 1
+    
+    activate ODB
+    ODB->>ODB: Speichere OLD (vorherige Werte)
+    ODB->>ODB: Speichere NEW (neue Werte)
+    ODB->>TRG: AFTER UPDATE Event
+    
+    activate TRG
+    TRG->>TRG: Zeitstempel erfassen:<br/>v_current_timestamp
+    TRG->>TRG: Nächste Version berechnen:<br/>v_next_version = 2
+    
+    TRG->>DWH: UPDATE dwh_lieferanten<br/>SET is_current = FALSE,<br/>    gueltig_bis = NOW()<br/>WHERE lieferant_id = 1<br/>  AND is_current = TRUE
+    
+    Note over DWH: Version 1 wird geschlossen
+    
+    TRG->>DWH: INSERT INTO dwh_lieferanten<br/>(..., rabatt_prozent = 10,<br/> gueltig_von = NOW(),<br/> is_current = TRUE,<br/> version_nummer = 2,<br/> aenderungstyp = 'UPDATE')
+    
+    Note over DWH: Version 2 wird angelegt
+    
+    DWH-->>TRG: Success
+    TRG-->>ODB: RETURN NEW
+    deactivate TRG
+    
+    ODB-->>APP: UPDATE erfolgreich
+    deactivate ODB
+    
+    Note over APP,DWH: Historie vollständig:<br/>Version 1: gueltig_bis = NOW(), is_current = FALSE<br/>Version 2: gueltig_bis = 9999-12-31, is_current = TRUE

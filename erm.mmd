@@ -1,0 +1,90 @@
+erDiagram
+    LIEFERANTEN ||--o{ MATERIALIEN : liefert
+    PRODUKTE ||--o{ PRODUKTIONSCHARGEN : "wird produziert in"
+    
+    LIEFERANTEN {
+        int lieferant_id PK
+        varchar name
+        varchar land
+        varchar stadt
+        varchar strasse
+        varchar plz
+        int qualitaetsstufe
+        int zahlungsziel_tage
+        numeric rabatt_prozent
+        boolean aktiv
+        varchar ansprechpartner
+        varchar telefon
+        varchar email
+        timestamp erstellt_am
+        timestamp geaendert_am
+    }
+    
+    MATERIALIEN {
+        int material_id PK
+        int lieferant_id FK
+        varchar materialname
+        varchar materialkategorie
+        varchar einheit
+        numeric einkaufspreis
+        int mindestbestand
+        int lagerbestand
+        boolean nachhaltigkeit_zertifikat
+        varchar herkunftsland
+        int lieferzeit_tage
+        boolean aktiv
+        timestamp erstellt_am
+        timestamp geaendert_am
+    }
+    
+    PRODUKTE {
+        int produkt_id PK
+        varchar produktname
+        varchar produktkategorie
+        varchar produktlinie
+        numeric verkaufspreis
+        numeric herstellkosten
+        numeric gewicht_kg
+        varchar masse_lxbxh
+        varchar farbe
+        varchar material_haupttyp
+        int lagerbestand
+        int mindestbestand
+        boolean aktiv
+        timestamp erstellt_am
+        timestamp geaendert_am
+    }
+    
+    BESTELLUNGEN {
+        int bestell_id PK
+        varchar kundennummer
+        varchar kundenname
+        varchar kundenkategorie
+        date bestelldatum
+        date lieferdatum
+        varchar status
+        numeric gesamtwert
+        varchar zahlungsbedingung
+        numeric versandkosten
+        numeric rabatt_prozent
+        varchar land
+        timestamp erstellt_am
+        timestamp geaendert_am
+    }
+    
+    PRODUKTIONSCHARGEN {
+        int chargen_id PK
+        int produkt_id FK
+        varchar chargennummer
+        int produktionsmenge
+        date produktionsdatum
+        date fertigstellungsdatum
+        varchar status
+        numeric ausschussquote_prozent
+        varchar verantwortlicher_mitarbeiter
+        varchar schicht
+        int qualitaetsnote
+        text bemerkung
+        timestamp erstellt_am
+        timestamp geaendert_am
+    }

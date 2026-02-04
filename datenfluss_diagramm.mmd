@@ -1,0 +1,47 @@
+flowchart TB
+    subgraph "Operative Datenbank"
+        OP_LF[Lieferanten]
+        OP_MT[Materialien]
+        OP_PD[Produkte]
+        OP_BS[Bestellungen]
+        OP_PC[Produktionschargen]
+    end
+    
+    subgraph "Trigger Layer"
+        TRG_I[INSERT Trigger]
+        TRG_U[UPDATE Trigger]
+        TRG_D[DELETE Trigger]
+    end
+    
+    subgraph "Data Warehouse"
+        DWH_LF[dwh_lieferanten]
+        DWH_MT[dwh_materialien]
+        DWH_PD[dwh_produkte]
+        DWH_BS[dwh_bestellungen]
+        DWH_PC[dwh_produktionschargen]
+    end
+    
+    subgraph "BI Layer"
+        BI_PIT[Point-in-Time Queries]
+        BI_TREND[Trend-Analysen]
+        BI_AUDIT[Audit-Trail]
+        BI_PROC[Process-Mining]
+    end
+    
+    OP_LF --> TRG_I
+    OP_LF --> TRG_U
+    OP_LF --> TRG_D
+    
+    TRG_I --> |version_nummer=1<br/>is_current=TRUE| DWH_LF
+    TRG_U --> |Alte Version schließen<br/>Neue Version anlegen| DWH_LF
+    TRG_D --> |aenderungstyp=DELETE| DWH_LF
+    
+    DWH_LF --> BI_PIT
+    DWH_LF --> BI_TREND
+    DWH_LF --> BI_AUDIT
+    
+    style TRG_I fill:#90EE90
+    style TRG_U fill:#FFD700
+    style TRG_D fill:#FF6B6B
+    style DWH_LF fill:#87CEEB
+    style BI_PIT fill:#DDA0DD

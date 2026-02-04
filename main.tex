@@ -1,0 +1,96 @@
+% !TEX root = main.tex
+\documentclass[12pt]{report}
+
+% Zeichenkodierung
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% Sprache (csquotes empfohlen für biblatex)
+\usepackage[ngerman]{babel}
+\usepackage{csquotes}
+
+% Seitenlayout
+\usepackage[top=2.2cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+
+% Tabellen
+\usepackage{tabularx}
+
+% Kapitel- und Abschnittsformatierung
+\usepackage{titlesec}
+\titleformat{\chapter}[block]{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{0pt}{12pt}
+\titlespacing*{\section}{0pt}{2.5ex plus .5ex}{1.5ex plus .3ex}
+\titlespacing*{\subsection}{0pt}{2ex plus .4ex}{1ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{1.5ex plus .3ex}{0.8ex plus .2ex}
+
+% Literaturverzeichnis
+\usepackage[backend=biber]{biblatex}
+\addbibresource{BachelorArbeit_LW.bib}
+
+% Platzhalter – an deine Arbeit anpassen
+\newcommand{\myType}{2} % 0=Seminararbeit, 1=Projektarbeit, 2=Bachelofrarbeit
+\newcommand{\myTopic}{Thema der Arbeit}
+\newcommand{\mySubTopic}{Untertitel der Arbeit}
+\newcommand{\myCompany}{Firmenname}
+\newcommand{\myCompanyAddressStreet}{Straße}
+\newcommand{\myCompanyAddressCity}{Ort}
+
+\begin{document}
+\include{chapters/Titlepage}
+
+\begin{titlepage}
+	\begin{center}
+		\vspace*{1cm}
+		\Huge\bf Sperrvermerk\\
+		\vspace*{2cm}
+		\normalsize\rm
+		\begin{quotation}
+			\parbox{0.8\textwidth}{Die vorliegende \ifcase\myType Seminararbeit \or Projektarbeit \or Bachelorarbeit\else\fi ~beinhaltet interne vertrauliche Informationen der Firma \myCompany, \myCompanyAddressStreet, \myCompanyAddressCity. Die Weitergabe des Inhaltes der Arbeit im Gesamten oder in Teilen ist grundsätzlich untersagt. Es dürfen keinerlei Kopien oder Abschriften - auch in digitaler Form - gefertigt werden. Ausnahmen bedürfen der schriftlichen Genehmigung der Firma \myCompany, \myCompanyAddressStreet, \myCompanyAddressCity.}
+		\end{quotation}
+		\vspace*{1cm}
+		\begin{quotation}
+		  \parbox{0.8\textwidth}{
+		  \begin{tabularx}{0.78\textwidth}{l@{\extracolsep\fill}l}
+				\rule{4cm}{0.3mm}&\rule{4cm}{0.3mm}\\
+	    	Ort, Datum&Unterschrift
+			\end{tabularx}}
+		\end{quotation}
+	\end{center}
+\end{titlepage}
+\newpage
+\setcounter{page}{3}
+
+\tableofcontents
+\newpage
+
+\include{chapters/Einleitung}
+\include{chapters/Theorieteil}
+\include{chapters/Praxisteil}
+
+\newpage
+\printbibliography[title={Literaturverzeichnis}, heading=bibintoc]
+
+\thispagestyle{empty}
+\addcontentsline{toc}{section}{Selbständigkeitserklärung}
+\begin{center}
+	\vspace*{2cm}
+	\Huge\bf Selbständigkeitserklärung\\
+	\vspace*{3cm}
+	\normalsize\rm
+	Ich versichere hiermit, dass ich meine \ifcase\myType Seminararbeit \or Projektarbeit \or Bachelorarbeit\else\fi ~mit dem Thema\\
+	\vspace*{2cm}
+	\Large\bf\myTopic\\
+	\Large\rm\mySubTopic\\
+	\vspace*{2cm}
+	\normalsize\rm
+	selbständig verfasst und keine anderen als die angegebenen\\Quellen und Hilfsmittel benutzt habe.\\
+	\vfill
+	\begin{tabularx}{\textwidth}{l@{\extracolsep\fill}r}
+  	\rule{7cm}{0.3mm}&\rule{7.55cm}{0.3mm}\\
+	\end{tabularx}
+	\begin{tabularx}{\textwidth}{*{2}{>{\arraybackslash}X}}
+	  Ort, Datum&Unterschrift\\
+	\end{tabularx}
+\end{center}
+
+\end{document}
