@@ -1,0 +1,41 @@
+erDiagram
+    PRODUKTE ||--o{ STUECKLISTE : "besteht aus"
+    MATERIALIEN ||--o{ STUECKLISTE : "wird verwendet in"
+    BESTELLUNGEN ||--o{ BESTELLPOSITIONEN : "enthält"
+    PRODUKTE ||--o{ BESTELLPOSITIONEN : "wird bestellt"
+    
+    MATERIALIEN {
+        int material_id PK
+        varchar materialname
+        numeric einkaufspreis
+    }
+    
+    STUECKLISTE {
+        int stueckliste_id PK
+        int produkt_id FK
+        int material_id FK
+        numeric menge
+        varchar einheit
+    }
+    
+    PRODUKTE {
+        int produkt_id PK
+        varchar produktname
+        numeric verkaufspreis
+        numeric herstellkosten
+    }
+    
+    BESTELLUNGEN {
+        int bestell_id PK
+        varchar kundennummer
+        date bestelldatum
+        varchar status
+    }
+    
+    BESTELLPOSITIONEN {
+        int position_id PK
+        int bestell_id FK
+        int produkt_id FK
+        int menge
+        numeric einzelpreis
+    }
