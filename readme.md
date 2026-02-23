@@ -13,3 +13,15 @@ psql -h localhost -p 5432 postgres
 MMD ausführen
 # 1. Einmal: Paket global oder im Projekt nutzen
 npx -y @mermaid-js/mermaid-cli -i DataWarehouse_ERM.mmd -o DataWarehouse_ERM.png 
+
+
+
+brew services stop postgresql@16 
+
+dann 
+
+lsof -i :5432
+
+dann 
+
+kill -9 <PID>
