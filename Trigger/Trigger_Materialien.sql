@@ -5,14 +5,18 @@ BEGIN
         INSERT INTO dw_materialien (material_id, materialname, einkaufspreis, gueltig_von, gueltig_bis)
         VALUES (NEW.material_id, NEW.materialname, NEW.einkaufspreis, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
         RETURN NEW;
+
     ELSIF (TG_OP = 'UPDATE') THEN
-        UPDATE dw_materialien
-        SET gueltig_bis = CURRENT_TIMESTAMP
-        WHERE material_id = OLD.material_id AND gueltig_bis = '9999-12-31 23:59:59';
-        
-        INSERT INTO dw_materialien (material_id, materialname, einkaufspreis, gueltig_von, gueltig_bis)
-        VALUES (NEW.material_id, NEW.materialname, NEW.einkaufspreis, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+        IF (OLD.* IS DISTINCT FROM NEW.*) THEN
+            UPDATE dw_materialien
+            SET gueltig_bis = CURRENT_TIMESTAMP
+            WHERE material_id = OLD.material_id AND gueltig_bis = '9999-12-31 23:59:59';
+            
+            INSERT INTO dw_materialien (material_id, materialname, einkaufspreis, gueltig_von, gueltig_bis)
+            VALUES (NEW.material_id, NEW.materialname, NEW.einkaufspreis, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+        END IF;
         RETURN NEW;
+
     ELSIF (TG_OP = 'DELETE') THEN
         UPDATE dw_materialien
         SET gueltig_bis = CURRENT_TIMESTAMP

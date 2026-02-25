@@ -5,14 +5,18 @@ BEGIN
         INSERT INTO dw_stueckliste (stueckliste_id, produkt_id, material_id, menge, einheit, gueltig_von, gueltig_bis)
         VALUES (NEW.stueckliste_id, NEW.produkt_id, NEW.material_id, NEW.menge, NEW.einheit, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
         RETURN NEW;
+
     ELSIF (TG_OP = 'UPDATE') THEN
-        UPDATE dw_stueckliste
-        SET gueltig_bis = CURRENT_TIMESTAMP
-        WHERE stueckliste_id = OLD.stueckliste_id AND gueltig_bis = '9999-12-31 23:59:59';
-        
-        INSERT INTO dw_stueckliste (stueckliste_id, produkt_id, material_id, menge, einheit, gueltig_von, gueltig_bis)
-        VALUES (NEW.stueckliste_id, NEW.produkt_id, NEW.material_id, NEW.menge, NEW.einheit, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+        IF (OLD.* IS DISTINCT FROM NEW.*) THEN
+            UPDATE dw_stueckliste
+            SET gueltig_bis = CURRENT_TIMESTAMP
+            WHERE stueckliste_id = OLD.stueckliste_id AND gueltig_bis = '9999-12-31 23:59:59';
+            
+            INSERT INTO dw_stueckliste (stueckliste_id, produkt_id, material_id, menge, einheit, gueltig_von, gueltig_bis)
+            VALUES (NEW.stueckliste_id, NEW.produkt_id, NEW.material_id, NEW.menge, NEW.einheit, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+        END IF;
         RETURN NEW;
+
     ELSIF (TG_OP = 'DELETE') THEN
         UPDATE dw_stueckliste
         SET gueltig_bis = CURRENT_TIMESTAMP

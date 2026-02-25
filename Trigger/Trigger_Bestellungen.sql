@@ -5,14 +5,21 @@ BEGIN
         INSERT INTO dw_bestellungen (bestell_id, kundennummer, bestelldatum, status, gueltig_von, gueltig_bis)
         VALUES (NEW.bestell_id, NEW.kundennummer, NEW.bestelldatum, NEW.status, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
         RETURN NEW;
-    ELSIF (TG_OP = 'UPDATE') THEN
-        UPDATE dw_bestellungen
-        SET gueltig_bis = CURRENT_TIMESTAMP
-        WHERE bestell_id = OLD.bestell_id AND gueltig_bis = '9999-12-31 23:59:59';
         
-        INSERT INTO dw_bestellungen (bestell_id, kundennummer, bestelldatum, status, gueltig_von, gueltig_bis)
-        VALUES (NEW.bestell_id, NEW.kundennummer, NEW.bestelldatum, NEW.status, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+    ELSIF (TG_OP = 'UPDATE') THEN
+   
+        IF (OLD.* IS DISTINCT FROM NEW.*) THEN     
+  
+            UPDATE dw_bestellungen
+            SET gueltig_bis = CURRENT_TIMESTAMP
+            WHERE bestell_id = OLD.bestell_id AND gueltig_bis = '9999-12-31 23:59:59';     
+   
+            INSERT INTO dw_bestellungen (bestell_id, kundennummer, bestelldatum, status, gueltig_von, gueltig_bis)
+            VALUES (NEW.bestell_id, NEW.kundennummer, NEW.bestelldatum, NEW.status, CURRENT_TIMESTAMP, '9999-12-31 23:59:59');
+            
+        END IF;
         RETURN NEW;
+        
     ELSIF (TG_OP = 'DELETE') THEN
         UPDATE dw_bestellungen
         SET gueltig_bis = CURRENT_TIMESTAMP
